@@ -42,3 +42,6 @@
 /* Put your global defines for all libraries here used in your project */
 
 #endif
+
+void wlaczwszystko();
+void ekrany(char* string);
