@@ -118,6 +118,22 @@ int main(void) {
     		    	pom = "battery\n";
     		    	USART_put(pom);
     		    }
+    	else if (j==2)
+    		    {
+    		    	pom = "sound\n";
+    		    	USART_put(pom);
+    		    	if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_3))
+    		    	      	    {
+    		    	    			GPIO_SetBits(GPIOD, GPIO_Pin_14); //niebieska?
+    		    	    			pom = "chsound\n";
+    		    	    			USART_put(pom);
+    		    	   		    }
+    		    }
+    	else if (j==3)
+    	{
+    		pom = "nots\n";
+    		USART_put(pom);
+    	}
     	}
 
 

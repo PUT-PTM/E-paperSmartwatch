@@ -69,6 +69,26 @@
     			0x1F,    // xxx 10001
     			0x1F     // xxx 11111
             };
+    int8_t tel1[] = {
+    		0b11111,
+    		0b10001,
+    		0b10001,
+    		0b11101,
+    		0b00101,
+    		0b00101,
+    		0b00101,
+			0b00101
+    	};
+    int8_t tel2[] = {
+    		0b00101,
+    			0b00101,
+    			0b00101,
+    			0b00101,
+    			0b00101,
+    			0b11101,
+    			0b10001,
+    			0b11111
+       	};
 void wlaczwszystko()
 {
 	/* czesc od blutuf */
@@ -160,7 +180,7 @@ void wlaczwszystko()
 
     //Initialize LCD 20 cols x 4 rows
     TM_HD44780_Init(20, 4);
-    TM_HD44780_Puts(0, 0, "TEST test TESTS");
+    TM_HD44780_Puts(0, 0, "Podlacz telefon");
 }
 char ClearDisplay[20];
 void ekrany(char* string)
@@ -172,7 +192,6 @@ void ekrany(char* string)
 			TM_HD44780_Clear();
 			strncpy(Display, string+2, strlen(string)-2);
 			TM_HD44780_Puts(0, 0, Display);
-			TM_HD44780_Puts(0, 1, string);
 			strncpy(Display, ClearDisplay, 20);
 		}
 		else if (string[0] == '1')
@@ -186,7 +205,7 @@ void ekrany(char* string)
 					if (output.quot == 0)
 					{
 						TM_HD44780_CreateChar(0, &customChar[0]);
-						TM_HD44780_PutCustom(0, 1, 0);
+						TM_HD44780_PutCustom(0, 1, 1);
 						TM_HD44780_PutCustom(1, 1, 0);
 						TM_HD44780_PutCustom(2, 1, 0);
 						TM_HD44780_PutCustom(3, 1, 0);
@@ -199,7 +218,7 @@ void ekrany(char* string)
 						TM_HD44780_CreateChar(2, &list1[0]);
 						TM_HD44780_CreateChar(3, &list2[0]);
 						TM_HD44780_PutCustom(0, 1, 1);
-						TM_HD44780_PutCustom(1, 1, 0);
+						TM_HD44780_PutCustom(1, 1, 1);
 						TM_HD44780_PutCustom(2, 1, 0);
 						TM_HD44780_PutCustom(3, 1, 0);
 						TM_HD44780_PutCustom(4, 1, 0);
@@ -213,7 +232,7 @@ void ekrany(char* string)
 						TM_HD44780_CreateChar(1, &filledChar[0]);
 						TM_HD44780_PutCustom(0, 1, 1);
 						TM_HD44780_PutCustom(1, 1, 1);
-						TM_HD44780_PutCustom(2, 1, 0);
+						TM_HD44780_PutCustom(2, 1, 1);
 						TM_HD44780_PutCustom(3, 1, 0);
 						TM_HD44780_PutCustom(4, 1, 0);
 					}
@@ -225,22 +244,11 @@ void ekrany(char* string)
 						TM_HD44780_PutCustom(0, 1, 1);
 						TM_HD44780_PutCustom(1, 1, 1);
 						TM_HD44780_PutCustom(2, 1, 1);
-						TM_HD44780_PutCustom(3, 1, 0);
-						TM_HD44780_PutCustom(4, 1, 0);
-					}
-
-					else if (output.quot == 4)
-					{
-						TM_HD44780_CreateChar(0, &customChar[0]);
-						TM_HD44780_CreateChar(1, &filledChar[0]);
-						TM_HD44780_PutCustom(0, 1, 1);
-						TM_HD44780_PutCustom(1, 1, 1);
-						TM_HD44780_PutCustom(2, 1, 1);
 						TM_HD44780_PutCustom(3, 1, 1);
 						TM_HD44780_PutCustom(4, 1, 0);
 					}
 
-					else if (output.quot == 5)
+					else if (output.quot > 3)
 					{
 						TM_HD44780_CreateChar(0, &customChar[0]);
 						TM_HD44780_CreateChar(1, &filledChar[0]);
@@ -250,35 +258,40 @@ void ekrany(char* string)
 						TM_HD44780_PutCustom(3, 1, 1);
 						TM_HD44780_PutCustom(4, 1, 1);
 					}
+
 				strncpy(Display, string+2, strlen(string)-2);
 				TM_HD44780_Puts(0, 0, Display);
 				strncpy(Display, ClearDisplay, 20);
 			}
 		else if (string[0] == '2')
 			{
-
-			}
-		else if (strstr(string, "10")) {
-				GPIO_ToggleBits(GPIOD, GPIO_Pin_12);
 				TM_HD44780_Clear();
-				TM_HD44780_Puts(0, 0, "Bambosz to pedal");
+				strncpy(Display, string+2, strlen(string)-2);
+				TM_HD44780_Puts(0, 0, Display);
+				TM_HD44780_CreateChar(2, &tel1[0]);
+				TM_HD44780_CreateChar(3, &tel2[0]);
+				TM_HD44780_PutCustom(15, 0, 2);
+				TM_HD44780_PutCustom(15, 1, 3);
+				strncpy(Display, ClearDisplay, 20);
 			}
-			else if(strstr(string, "20")) {
-				TM_HD44780_Clear();
-				TM_HD44780_Puts(0, 0, "Hehehehe");
-				GPIO_ToggleBits(GPIOD, GPIO_Pin_13);
+		else if (string[0] == '3')
+					{
+						TM_HD44780_Clear();
+						strncpy(Display, string+2, strlen(string)-2);
+						TM_HD44780_Puts(0, 0, Display);
+						TM_HD44780_CreateChar(2, &list1[0]);
+						TM_HD44780_CreateChar(3, &list2[0]);
+						TM_HD44780_PutCustom(14, 0, 2);
+						TM_HD44780_PutCustom(15, 0, 3);
+						strncpy(Display, ClearDisplay, 20);
+					}
 
-			}
-			else if(strstr(string, "3")) {
-				TM_HD44780_Clear();
-				TM_HD44780_Puts(0, 0, "Zarcik :)");
-				GPIO_ToggleBits(GPIOD, GPIO_Pin_14);
+		else if (string[0] == '4')
+					{
+						TM_HD44780_Clear();
+						strncpy(Display, string+2, strlen(string)-2);
+						TM_HD44780_Puts(0, 0, Display);
+						strncpy(Display, ClearDisplay, 20);
+					}
 
-			}
-		else if(strstr(string, "4")) {
-			GPIO_ToggleBits(GPIOD, GPIO_Pin_15);
-			TM_HD44780_Clear();
-			TM_HD44780_Puts(0, 0, "Artur to najle");
-			TM_HD44780_Puts(0, 1, "pszy programista");
-}
 }
